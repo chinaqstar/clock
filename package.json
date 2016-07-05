@@ -1,0 +1,21 @@
+{
+  "name": "oa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "request": "^2.72.0",
+    "windows-shortcuts": "^0.1.4",
+    "yargs": "^4.7.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "setting": "node ./script/autoRun.js",
+    "on": "node ./index.js --on",
+    "off": "node ./index.js --off",
+    "onf": "node ./index.js --on --f",
+    "offf": "node ./index.js --off --f"
+  },
+  "author": "",
+  "license": "ISC"
+}
