@@ -10,11 +10,11 @@ let logPath = path.join(__dirname, "log/log.txt")
 let responsePath = path.join(__dirname, 'log/index.html')
 
 
-// let onDutyUrl =  'http://oa.dronggroup.com/general//attendance/personal/duty/submit.php?REGISTER_TYPE=1'; //上班
-// let offDutyUrl = 'http://oa.dronggroup.com/general//attendance/personal/duty/submit.php?REGISTER_TYPE=2'; //下班
+let onDutyUrl =  'http://oa.dronggroup.com/general//attendance/personal/duty/submit.php?REGISTER_TYPE=1'; //上班
+let offDutyUrl = 'http://oa.dronggroup.com/general//attendance/personal/duty/submit.php?REGISTER_TYPE=2'; //下班
 
-let onDutyUrl = 'http://oa.dronggroup.com/general/index.php?isIE=0';
-let offDutyUrl = 'http://www.baidu.com';
+// let onDutyUrl = 'http://oa.dronggroup.com/general/index.php?isIE=0';
+// let offDutyUrl = 'http://www.baidu.com';
 
 let dutyUrl, mode;
 
