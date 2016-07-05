@@ -16,6 +16,8 @@ let offDutyUrl = 'http://oa.dronggroup.com/general//attendance/personal/duty/sub
 // let onDutyUrl = 'http://oa.dronggroup.com/general/index.php?isIE=0';
 // let offDutyUrl = 'http://www.baidu.com';
 
+let indexPath = path.join(__dirname,'index.js')
+
 let dutyUrl, mode;
 
 if (argv.off) {
@@ -30,9 +32,9 @@ if (argv.off) {
 writeLog('auto:'+mode+'启动成功');
 
 if (!timeCheck.onDutyTimeCheck && mode === 'on' && !argv.f) {
-  throw new Error("现在已经上班啦，你还要打上班的卡么？ 输入node ./index.js --on --f或者 npm run onf 强行打卡")
+  throw new Error("现在已经上班啦，你还要打上班的卡么？ 输入node "+indexPath+" --on --f或者 npm run onf 强行打卡")
 } else if (!timeCheck.offDutyTimestamp && mode === 'off' && !argv.f) {
-  throw new Error("还没下班呢，打什么卡...  输入node ./index.js --off --f 或者 npm run offf强行打卡")
+  throw new Error("还没下班呢，打什么卡...  输入node "+indexPath+" --off --f 或者 npm run offf强行打卡")
 }else{
 request = request.defaults({ jar: true })
 request(
