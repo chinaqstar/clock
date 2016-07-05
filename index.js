@@ -10,13 +10,13 @@ let logPath = path.join(__dirname, "log/log.txt")
 let responsePath = path.join(__dirname, 'log/index.html')
 
 
-let onDutyUrl =  'http://oa.dronggroup.com/general//attendance/personal/duty/submit.php?REGISTER_TYPE=1'; //上班
+let onDutyUrl = 'http://oa.dronggroup.com/general//attendance/personal/duty/submit.php?REGISTER_TYPE=1'; //上班
 let offDutyUrl = 'http://oa.dronggroup.com/general//attendance/personal/duty/submit.php?REGISTER_TYPE=2'; //下班
 
 // let onDutyUrl = 'http://oa.dronggroup.com/general/index.php?isIE=0';
 // let offDutyUrl = 'http://www.baidu.com';
 
-let indexPath = path.join(__dirname,'index.js')
+let indexPath = path.join(__dirname, 'index.js')
 
 let dutyUrl, mode;
 
@@ -29,39 +29,43 @@ if (argv.off) {
 } else {
   throw new Error("带参数启动；--on 上班  --off 下班")
 }
-writeLog('auto:'+mode+'启动成功');
+writeLog('auto:' + mode + '启动成功');
 
 if (!timeCheck.onDutyTimeCheck && mode === 'on' && !argv.f) {
-  throw new Error("现在已经上班啦，你还要打上班的卡么？ 输入node "+indexPath+" --on --f或者 npm run onf 强行打卡")
+  let str = `现在已经上班啦，你还要打上班的卡么？ 输入node ${indexPath} --on --f或者 npm run onf 强行打卡`
+  writeLog(str)
+  throw new Error(str)
 } else if (!timeCheck.offDutyTimestamp && mode === 'off' && !argv.f) {
-  throw new Error("还没下班呢，打什么卡...  输入node "+indexPath+" --off --f 或者 npm run offf强行打卡")
-}else{
-request = request.defaults({ jar: true })
-request(
-  {
-    method: 'POST',
-    uri: 'http://oa.dronggroup.com/logincheck.php',
-    formData: { UNAME: CONF.username, PASSWORD: CONF.pwd }
-  },
-  function (err, res) {
-    if (err) {
-      writeLog(JSON.stringify(err))
-      throw new Error(err)
-    }
-    writeLog("[headers]" + JSON.stringify(res.headers));
-    checkCookies(res.headers['set-cookie']);
+  let str = `还没下班呢，打什么卡...  输入node ${indexPath} --off --f 或者 npm run offf强行打卡`
+  writeLog(str)
+  throw new Error(str)
+} else {
+  request = request.defaults({ jar: true })
+  request(
+    {
+      method: 'POST',
+      uri: 'http://oa.dronggroup.com/logincheck.php',
+      formData: { UNAME: CONF.username, PASSWORD: CONF.pwd }
+    },
+    function (err, res) {
+      if (err) {
+        writeLog(JSON.stringify(err))
+        throw new Error(err)
+      }
+      writeLog("[headers]" + JSON.stringify(res.headers));
+      checkCookies(res.headers['set-cookie']);
 
-    request(
-      dutyUrl,
-      (err, res) => {
-        if (err) {
-          writeLog(JSON.stringify(err))
-          throw new Error(err)
-        }
-        writeLog('打卡成功')
-        console.log('打卡成功')
-      }).pipe(fs.createWriteStream(responsePath))
-  })
+      request(
+        dutyUrl,
+        (err, res) => {
+          if (err) {
+            writeLog(JSON.stringify(err))
+            throw new Error(err)
+          }
+          writeLog('打卡成功')
+          console.log('打卡成功')
+        }).pipe(fs.createWriteStream(responsePath))
+    })
 
 }
 

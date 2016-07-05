@@ -3,3 +3,4 @@ node_modules
 script/*.bat
 log
 config.json
+*.log
