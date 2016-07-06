@@ -5,6 +5,7 @@ let request = require("request");
 let CONF = require('./config.json')
 const argv = require('yargs').argv;
 const timeCheck = require('./timeCheck')
+const http = require('http')
 
 let logPath = path.join(__dirname, "log/log.txt")
 let responsePath = path.join(__dirname, 'log/index.html')
@@ -55,16 +56,25 @@ if (!timeCheck.onDutyTimeCheck && mode === 'on' && !argv.f) {
       writeLog("[headers]" + JSON.stringify(res.headers));
       checkCookies(res.headers['set-cookie']);
 
-      request(
-        dutyUrl,
-        (err, res) => {
-          if (err) {
-            writeLog(JSON.stringify(err))
-            throw new Error(err)
-          }
-          writeLog('打卡成功')
-          console.log('打卡成功')
-        }).pipe(fs.createWriteStream(responsePath))
+      let proxy = http.createServer((req, res) => {
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        request(
+          dutyUrl,
+          (err, res) => {
+            if (err) {
+              writeLog(JSON.stringify(err))
+              throw new Error(err)
+            }
+            writeLog('访问成功，查看浏览器是否打卡成功')
+            console.log('访问成功，查看浏览器是否打卡成功')
+          }).pipe(res);
+        //   res.end('okay');
+      });
+
+      proxy.listen('60000', () => {
+        require('child_process').spawn('explorer', ['http://localhost:60000'])
+      })
+
     })
 
 }
